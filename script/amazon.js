@@ -27,7 +27,7 @@
 // ];
 //this data was then included directly from the folder product.js
 
-import{cart} from '../data/cart.js';
+import{cart, addToCart} from '../data/cart.js';
 import{products} from '../data/products.js';
 
 // creating a html for each product in JS to replace it from HTML
@@ -52,7 +52,7 @@ products.forEach((product)=>{
   </div>
 
   <div class="product-price">
-    $${(product.price / 100).toFixed(2)}
+    $${(product.priceCents / 100).toFixed(2)}
   </div>
 
   <div class="product-quantity-container">
@@ -84,58 +84,39 @@ products.forEach((product)=>{
 </div>`
 
 });
-
-
 // fetching html tag using class to insert the HTML data created in JS
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
+function addedPopup(productId){
+  //adding popup messege when when item added to cart
+  const popUp= document.querySelector(`.js-add-to-cart-${productId}`);
+  popUp.classList.add('added');
+  setTimeout(() => {
+    popUp.classList.remove('added');
+  },2000);
+}
+
+function updateQuantity(productId){
+  //counting the total quantity of product added to the cart including the same products if present
+  let cartQuantity=0;
+  cart.forEach((cartItem)=>{
+    cartQuantity += cartItem.quantity;
+  });
+  //display the cart quantity on the webpage
+  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+}
 
 //adding eventlistener to each add to cart button
-let quantitySelector;
 document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
   button.addEventListener('click',()=>{
     const productId = button.dataset.productId;
-
-    //adding popup messege when when item added to cart
-    const popUp= document.querySelector(`.js-add-to-cart-${productId}`);
-    popUp.classList.add('added');
-    setTimeout(() => {
-      popUp.classList.remove('added');
-    },2000);
-    
-
-    //selcet the quantity from the option provided and convert to number
-    quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
-    quantitySelector = Number(quantitySelector.value);
-    
-    //check if product is already in the cart
-    let matchingItem;
-    cart.forEach((item)=>{
-      if(productId === item.productId){
-        matchingItem =item;
-      }
+  
+    addedPopup(productId);
+    addToCart(productId);
+    updateQuantity(productId);
     });
-   
-    //if product is in the cart increase its quantity else add new product into the cart
-      if(matchingItem){
-        matchingItem.quantity+=quantitySelector;
-      }else{
-        cart.push({
-          productId: productId,
-          quantity: quantitySelector
-        });
-      }
-
-    //counting the total quantity of product added to the cart including the same products if present
-      let cartQuantity=0;
-      cart.forEach((item)=>{
-        cartQuantity += item.quantity;
-      });
-      //display the cart quantity on the webpage
-      document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-      
-
-
-    });
-
   });
+
+
+
+
