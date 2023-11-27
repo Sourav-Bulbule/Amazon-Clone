@@ -1,34 +1,34 @@
 // saving each product info into a variable by creating a object of each product
-const products = [{
-  image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
-  name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
-  rating:{
-    stars:4.5,
-    count:87
-  },
-  price: 1090
-},{
-  image: 'images/products/intermediate-composite-basketball.jpg',
-  name: 'Intermediate Size Basketball',
-  rating:{
-    stars:4,
-    count:127
-  },
-  price: 2095
-},{
-  image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
-  name: 'Adults Plain Cotton T-Shirt - 2 Pack',
-  rating:{
-    stars:4.5,
-    count:56
-  },
-  price: 799
-}
-];
+// const products = [{
+//   image: 'images/products/athletic-cotton-socks-6-pairs.jpg',
+//   name: 'Black and Gray Athletic Cotton Socks - 6 Pairs',
+//   rating:{
+//     stars:4.5,
+//     count:87
+//   },
+//   price: 1090
+// },{
+//   image: 'images/products/intermediate-composite-basketball.jpg',
+//   name: 'Intermediate Size Basketball',
+//   rating:{
+//     stars:4,
+//     count:127
+//   },
+//   price: 2095
+// },{
+//   image: 'images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg',
+//   name: 'Adults Plain Cotton T-Shirt - 2 Pack',
+//   rating:{
+//     stars:4.5,
+//     count:56
+//   },
+//   price: 799
+// }
+// ];
+//this data was then included directly from the folder product.js
 
 
 // creating a html for each product in JS to replace it from HTML
-
 let productsHTML = '';
 products.forEach((product)=>{
   productsHTML += `<div class="product-container">
@@ -75,12 +75,42 @@ products.forEach((product)=>{
     Added
   </div>
 
-  <button class="add-to-cart-button button-primary">
+  <button class="add-to-cart-button button-primary js-add-to-cart"
+  data-product-id="${product.id}">
     Add to Cart
   </button>
 </div>`
 
 });
 
+
 // fetching html tag using class to insert the HTML data created in JS
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
+
+
+//adding eventlistener to each add to cart button
+document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
+  button.addEventListener('click',()=>{
+    const productId = button.dataset.productId;
+
+    //check if product is already in the cart
+    let matchingItem;
+    cart.forEach((item)=>{
+      if(productId === item.productId){
+        matchingItem =item;
+      }
+    });
+
+    //if product is in the cart increase its quantity else add new product into the cart
+      if(matchingItem){
+        matchingItem.quantity+=1;
+      }else{
+        cart.push({
+          productId: productId,
+          quantity: 1
+        });
+      }
+      console.log(cart);
+    });
+
+  });
