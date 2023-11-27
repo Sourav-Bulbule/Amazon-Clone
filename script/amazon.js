@@ -82,4 +82,5 @@ products.forEach((product)=>{
 
 });
 
+// fetching html tag using class to insert the HTML data created in JS
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
