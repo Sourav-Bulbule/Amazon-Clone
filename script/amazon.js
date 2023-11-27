@@ -70,7 +70,7 @@ products.forEach((product)=>{
 
   <div class="product-spacer"></div>
 
-  <div class="added-to-cart">
+  <div class="added-to-cart  js-add-to-cart-${product.id}">
     <img src="images/icons/checkmark.png">
     Added
   </div>
@@ -94,8 +94,16 @@ document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
   button.addEventListener('click',()=>{
     const productId = button.dataset.productId;
 
+    //adding popup messege when when item added to cart
+    const popUp= document.querySelector(`.js-add-to-cart-${productId}`);
+    popUp.classList.add('added');
+    setTimeout(() => {
+      popUp.classList.remove('added');
+    },2000);
+    
+
     //selcet the quantity from the option provided and convert to number
-     quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
+    quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
     quantitySelector = Number(quantitySelector.value);
     
     //check if product is already in the cart
@@ -124,6 +132,8 @@ document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
       //display the cart quantity on the webpage
       document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
       
+
+
     });
 
   });
