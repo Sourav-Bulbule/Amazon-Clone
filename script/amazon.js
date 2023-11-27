@@ -110,7 +110,15 @@ document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
           quantity: 1
         });
       }
-      console.log(cart);
+
+    //counting the total quantity of product added to the cart including the same products if present
+      let cartQuantity=0;
+      cart.forEach((item)=>{
+        cartQuantity += item.quantity;
+      });
+      //display the cart quantity on the webpage
+      document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+      
     });
 
   });
