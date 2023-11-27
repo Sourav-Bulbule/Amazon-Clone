@@ -27,6 +27,8 @@
 // ];
 //this data was then included directly from the folder product.js
 
+import{cart} from '../data/cart.js';
+import{products} from '../data/products.js';
 
 // creating a html for each product in JS to replace it from HTML
 let productsHTML = '';
