@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, removeFromCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
@@ -14,7 +14,7 @@ cart.forEach((cartItem)=>{
     }
   });
 
-  cartSummaryHTML += `<div class="cart-item-container">
+  cartSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
   <div class="delivery-date">
     Delivery date: Tuesday, June 21
   </div>
@@ -37,7 +37,7 @@ cart.forEach((cartItem)=>{
         <span class="update-quantity-link link-primary">
           Update
         </span>
-        <span class="delete-quantity-link link-primary">
+        <span class="delete-quantity-link link-primary js-remove-cart" data-product-id="${matchingProduct.id}">
           Delete
         </span>
       </div>
@@ -93,3 +93,15 @@ cart.forEach((cartItem)=>{
 });
 //pushing the generated HTML into the webpage using DOM
 document.querySelector('.js-cart-summary').innerHTML = cartSummaryHTML;
+
+//adding event listner to all delect link on checkout page
+document.querySelectorAll('.js-remove-cart').forEach((link)=>{
+  link.addEventListener('click',()=>{
+    const productId = link.dataset.productId;
+    //function in cart.js to remove item from cart
+    removeFromCart(productId);
+    //we need to remove item form webpage here instead from the above function is as it doesnt have acces to the html in this page, we are using the .remove() function of dom to remove the html div using its unique class that contains its id
+    const container = document.querySelector(`.js-cart-item-container-${productId}`);
+    container.remove();
+  })
+});
