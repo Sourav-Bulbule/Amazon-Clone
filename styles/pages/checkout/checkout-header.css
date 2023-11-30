@@ -24,6 +24,7 @@
 
 .checkout-header-left-section {
   width: 150px;
+  
 }
 
 .amazon-logo {
@@ -72,6 +73,7 @@
   font-size: 23px;
   text-decoration: none;
   cursor: pointer;
+  margin-top: 2.5px;
 }
 
 @media (max-width: 1000px) {

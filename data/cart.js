@@ -1,5 +1,5 @@
 export let cart = JSON.parse(localStorage.getItem('cart'));
-
+import { updateQuantity } from "../script/utils/quanityCalculater.js";
 //if local storage data is empty then this default cart will be used
 if(!cart){
   cart = [{
@@ -57,4 +57,18 @@ export function removeFromCart(productId){
 
   //update data to localstprage
   saveToStorage();
+}
+
+//function to update the new quantity enterd in the checklist page using update button
+export function updateItemQuantity(productId,newQuantity){
+  let matchingItem;
+  cart.forEach((cartItem)=>{
+    if(productId === cartItem.productId){
+      matchingItem = cartItem;
+    }
+  });
+  matchingItem.quantity = newQuantity;
+  saveToStorage();
+  location.reload();
+  
 }

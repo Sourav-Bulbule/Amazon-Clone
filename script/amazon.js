@@ -27,9 +27,11 @@
 // ];
 //this data was then included directly from the folder product.js
 
-import{cart, addToCart} from '../data/cart.js';
+import{ addToCart} from '../data/cart.js';
 import{products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+import { updateQuantity } from './utils/quanityCalculater.js';
+
 
 // creating a html for each product in JS to replace it from HTML
 let productsHTML = '';
@@ -97,15 +99,9 @@ function addedPopup(productId){
   },2000);
 }
 
-function updateQuantity(productId){
-  //counting the total quantity of product added to the cart including the same products if present
-  let cartQuantity=0;
-  cart.forEach((cartItem)=>{
-    cartQuantity += cartItem.quantity;
-  });
-  //display the cart quantity on the webpage
-  document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
-}
+
+
+
 
 //adding eventlistener to each add to cart button
 document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
@@ -114,10 +110,11 @@ document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
   
     addedPopup(productId);
     addToCart(productId);
-    updateQuantity(productId);
+    document.querySelector('.js-cart-quantity').innerHTML = updateQuantity();
     });
   });
 
-
+   //this code helps update the count when we go back to amazon page from checklist page;
+   document.querySelector('.js-cart-quantity').innerHTML = updateQuantity();
 
 

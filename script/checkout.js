@@ -1,6 +1,7 @@
-import { cart, removeFromCart } from "../data/cart.js";
+import { cart, removeFromCart, updateItemQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
+import { updateQuantity } from "./utils/quanityCalculater.js";
 
 //converting static HTML to dynamic using JS similary to amazone.js where data was taken from product.js and populatted on webpage using js
 let cartSummaryHTML = '';
@@ -32,11 +33,13 @@ cart.forEach((cartItem)=>{
       </div>
       <div class="product-quantity">
         <span>
-          Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+          Quantity: <span class="quantity-label js-quantity-${matchingProduct.id}" >${cartItem.quantity}</span>
         </span>
-        <span class="update-quantity-link link-primary">
+        <span class="update-quantity-link link-primary js-update-cart" data-product-id="${matchingProduct.id}">
           Update
         </span>
+        <input class="quantity-input js-new-quantity-${matchingProduct.id}" type="number" min="1">
+        <span class="save-quantity-link link-primary js-savequantityto-cart" data-product-id="${matchingProduct.id}" >Save</span>
         <span class="delete-quantity-link link-primary js-remove-cart" data-product-id="${matchingProduct.id}">
           Delete
         </span>
@@ -103,5 +106,34 @@ document.querySelectorAll('.js-remove-cart').forEach((link)=>{
     //we need to remove item form webpage here instead from the above function is as it doesnt have acces to the html in this page, we are using the .remove() function of dom to remove the html div using its unique class that contains its id
     const container = document.querySelector(`.js-cart-item-container-${productId}`);
     container.remove();
+    document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
   })
 });
+
+//adding event listner to all update link on checkout page
+document.querySelectorAll('.js-update-cart').forEach(updateLink=>{
+  updateLink.addEventListener('click',()=>{
+    const productId = updateLink.dataset.productId;
+    const update = document.querySelector(`.js-cart-item-container-${productId}`);
+    update.classList.add('is-editing-quantity')
+  });
+});
+
+//saving quantity eventlsitener
+document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
+  saveLink.addEventListener('click',()=>{
+    const productId = saveLink.dataset.productId;
+    const save = document.querySelector(`.js-cart-item-container-${productId}`);
+    let newQuantity = document.querySelector(`.js-new-quantity-${productId}`);
+    newQuantity = Number(newQuantity.value);
+    updateItemQuantity(productId,newQuantity);
+    save.classList.remove('is-editing-quantity');
+    document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
+    
+    
+  });
+});
+
+//shows the quantity of items presnet in the cart on the webpage
+document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
+  
