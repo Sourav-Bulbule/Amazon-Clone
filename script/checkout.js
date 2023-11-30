@@ -124,9 +124,17 @@ document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
   saveLink.addEventListener('click',()=>{
     const productId = saveLink.dataset.productId;
     const save = document.querySelector(`.js-cart-item-container-${productId}`);
+  
     let newQuantity = document.querySelector(`.js-new-quantity-${productId}`);
     newQuantity = Number(newQuantity.value);
-    updateItemQuantity(productId,newQuantity);
+    //checking if the entered quantity is 1 or more the one,if nothing is entered the
+    if(newQuantity>=1){
+      updateItemQuantity(productId,newQuantity);
+    }else{
+      newQuantity=1;
+      updateItemQuantity(productId,newQuantity);
+    }
+    
     save.classList.remove('is-editing-quantity');
     document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
     
