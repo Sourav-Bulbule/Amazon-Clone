@@ -1,33 +1,25 @@
 import { cart, removeFromCart, updateItemQuantity, updateDeliveryOption } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products, getProduct } from "../../data/products.js";
 import { formatCurrency } from "../utils/money.js";
 import { updateQuantity } from "../utils/quanityCalculater.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import{deliveryOptions} from "../../data/deliveryOptions.js";
+import{deliveryOptions, getDeliveryOption} from "../../data/deliveryOptions.js";
 
 
 //make this function as it hold the main html to load on the page so incase if we make changes to any one element on the page instead of reloading the page we call this function to re-run and update thoes elements to the page
-export function renderFunction(){
+export function renderOrderSummary(){
 //converting static HTML to dynamic using JS similary to amazone.js where data was taken from product.js and populatted on webpage using js
 let cartSummaryHTML = '';
 cart.forEach((cartItem)=>{
+  //function to find the matching product 
   const productId = cartItem.productId;
-
-  let matchingProduct;
-  products.forEach((product)=>{
-    if(product.id === productId ){
-      matchingProduct = product;
-    }
-  });
+  const matchingProduct = getProduct(productId)
 
   //get the date we have selected in the delivery option and use it to put in the div delivery-date
+  //function to find the deliveryotpion delected
   const deliveryOptionId = cartItem.deliveryOptionId;
-  let deliveryOption;
-  deliveryOptions.forEach((option)=>{
-    if(option.id ===deliveryOptionId){
-      deliveryOption =option;
-    }
-  });
+  const deliveryOption = getDeliveryOption(deliveryOptionId);
+
     const today = dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays,'days');
     const dateString = deliveryDate.format('dddd, MMMM D');
@@ -111,7 +103,7 @@ function deliveryOptionsHTML(matchingProduct,cartItem){
   return html;
 }
 
-//adding event listner to all delect link on checkout page
+//adding event listner to all delete link on checkout page
 document.querySelectorAll('.js-remove-cart').forEach((link)=>{
   link.addEventListener('click',()=>{
     const productId = link.dataset.productId;
@@ -129,7 +121,7 @@ document.querySelectorAll('.js-delivery-option').forEach((element)=>{
   element.addEventListener('click',()=>{
     const {productId, deliveryOptionId} = element.dataset;
     updateDeliveryOption(productId,deliveryOptionId)
-    renderFunction();
+    renderOrderSummary();
   })
 });
 
@@ -160,7 +152,7 @@ document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
     }
     
     save.classList.remove('is-editing-quantity');
-    renderFunction();
+    renderOrderSummary();
     //document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
     
     
@@ -171,4 +163,4 @@ document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
 document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
 }
 
-renderFunction();
+renderOrderSummary();
