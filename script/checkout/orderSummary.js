@@ -7,6 +7,7 @@ import{deliveryOptions, getDeliveryOption} from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummary.js";
 
 
+
 //make this function as it hold the main html to load on the page so incase if we make changes to any one element on the page instead of reloading the page we call this function to re-run and update thoes elements to the page
 export function renderOrderSummary(){
 //converting static HTML to dynamic using JS similary to amazone.js where data was taken from product.js and populatted on webpage using js
@@ -21,9 +22,22 @@ cart.forEach((cartItem)=>{
   const deliveryOptionId = cartItem.deliveryOptionId;
   const deliveryOption = getDeliveryOption(deliveryOptionId);
 
+    //const today = dayjs();
+    //const deliveryDate = today.add(deliveryOption.deliveryDays,'days');
+    
+
     const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays,'days');
+    let deliveryDate = today.add(deliveryOption.deliveryDays,'days');
+    //check if its sunday or saturday and if it is add 1 or 2 days extra to make the changes so it does not display saturday or sunday
+    const dayOfWeek = isWeekend(deliveryDate);
+    if(dayOfWeek === 'Saturday'){
+      deliveryDate = deliveryDate.add(2,'days')
+    }else if(dayOfWeek === 'Sunday'){
+      deliveryDate = deliveryDate.add(1,'days')
+    }
     const dateString = deliveryDate.format('dddd, MMMM D');
+
+
 
   //creating html  
   cartSummaryHTML += `<div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -69,14 +83,27 @@ cart.forEach((cartItem)=>{
 });
 //pushing the generated HTML into the webpage using DOM
 document.querySelector('.js-cart-summary').innerHTML = cartSummaryHTML;
-
+// function to get the format of date to return day of the week not the date
+function isWeekend(date) {
+  const dayOfWeek = date.format('dddd');
+  return dayOfWeek
+}
 //creating function to create deliveryoption HTML seperatly
 function deliveryOptionsHTML(matchingProduct,cartItem){
   let html = ''
   deliveryOptions.forEach((deliveryOption)=>{
+
+    //check if its sunday or saturday and if it is add 1 or 2 days extra to make the changes so it does not display saturday or sunday
     const today = dayjs();
-    const deliveryDate = today.add(deliveryOption.deliveryDays,'days');
+    let deliveryDate = today.add(deliveryOption.deliveryDays,'days');
+    const dayOfWeek = isWeekend(deliveryDate);
+    if(dayOfWeek === 'Saturday'){
+      deliveryDate = deliveryDate.add(2,'days')
+    }else if(dayOfWeek === 'Sunday'){
+      deliveryDate = deliveryDate.add(1,'days')
+    }
     const dateString = deliveryDate.format('dddd, MMMM D');
+
 
     const priceString = deliveryOption.priceCents === 0? 'FREE': `$${formatCurrency(deliveryOption.priceCents)} -`;  
 
@@ -165,6 +192,11 @@ document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
 
 //shows the quantity of items presnet in the cart on the webpage
 document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
+
+const today = dayjs();
+      const date = today.subtract(1, 'month');
+      console.log(date.format('MMMM D'));
 }
 
 renderOrderSummary();
+
