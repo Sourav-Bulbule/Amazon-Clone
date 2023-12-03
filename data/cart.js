@@ -1,5 +1,5 @@
 export let cart = JSON.parse(localStorage.getItem('cart'));
-import { updateQuantity } from "../script/utils/quanityCalculater.js";
+
 //if local storage data is empty then this default cart will be used
 if(!cart){
   cart = [{
@@ -71,11 +71,12 @@ export function updateItemQuantity(productId,newQuantity){
   });
   matchingItem.quantity = newQuantity;
   saveToStorage();
-  
+
+  //no need of the below code as we are using mvc model by using the rerenderfunction to render the whole html in case we update any element
   //location.reload();
   
 }
-
+ 
 
 //function to update the deliveryoption we select in the 3 options preset to make the website interactive
 export function updateDeliveryOption(productId,deliveryOptionId){
