@@ -111,8 +111,10 @@ document.querySelectorAll('.js-remove-cart').forEach((link)=>{
     //function in cart.js to remove item from cart
     removeFromCart(productId);
     //we need to remove item form webpage here instead from the above function is as it doesnt have acces to the html in this page, we are using the .remove() function of dom to remove the html div using its unique class that contains its id
-    const container = document.querySelector(`.js-cart-item-container-${productId}`);
-    container.remove();
+    //the below wee have to codes one which deletes the html directly(ie. usind dom as commenetd below) another which re-runs the html (ie. renderordersummary(0))
+    // const container = document.querySelector(`.js-cart-item-container-${productId}`);
+    // container.remove();
+    renderOrderSummary();
     renderPaymentSummary();
   })
 });
