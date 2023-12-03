@@ -4,6 +4,7 @@ import { formatCurrency } from "../utils/money.js";
 import { updateQuantity } from "../utils/quanityCalculater.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import{deliveryOptions, getDeliveryOption} from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 
 //make this function as it hold the main html to load on the page so incase if we make changes to any one element on the page instead of reloading the page we call this function to re-run and update thoes elements to the page
@@ -112,7 +113,7 @@ document.querySelectorAll('.js-remove-cart').forEach((link)=>{
     //we need to remove item form webpage here instead from the above function is as it doesnt have acces to the html in this page, we are using the .remove() function of dom to remove the html div using its unique class that contains its id
     const container = document.querySelector(`.js-cart-item-container-${productId}`);
     container.remove();
-    document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
+    renderPaymentSummary();
   })
 });
 
@@ -122,6 +123,7 @@ document.querySelectorAll('.js-delivery-option').forEach((element)=>{
     const {productId, deliveryOptionId} = element.dataset;
     updateDeliveryOption(productId,deliveryOptionId)
     renderOrderSummary();
+    renderPaymentSummary();
   })
 });
 
@@ -154,7 +156,7 @@ document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
     save.classList.remove('is-editing-quantity');
     renderOrderSummary();
     //document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
-    
+    renderPaymentSummary();
     
   });
 });
