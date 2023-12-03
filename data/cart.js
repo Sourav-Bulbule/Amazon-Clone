@@ -33,7 +33,6 @@ export function addToCart(productId){
       matchingItem = cartItem;
     }
   });
- 
   //if product is in the cart increase its quantity else add new product into the cart
     if(matchingItem){
       matchingItem.quantity+=quantitySelector;
@@ -74,4 +73,18 @@ export function updateItemQuantity(productId,newQuantity){
   saveToStorage();
   location.reload();
   
+}
+
+
+//function to update the deliveryoption we select in the 3 options preset to make the website interactive
+export function updateDeliveryOption(productId,deliveryOptionId){
+  let matchingItem;
+  cart.forEach((cartItem)=>{
+    if(productId === cartItem.productId){
+      matchingItem = cartItem;
+    }
+  });
+
+  matchingItem.deliveryOptionId = deliveryOptionId;
+  saveToStorage();
 }

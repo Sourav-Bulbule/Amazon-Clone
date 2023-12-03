@@ -1,9 +1,10 @@
-import { cart, removeFromCart, updateItemQuantity } from "../data/cart.js";
+import { cart, removeFromCart, updateItemQuantity, updateDeliveryOption } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 import { updateQuantity } from "./utils/quanityCalculater.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
-import{deliveryOptions} from "../data/deliveryOptions.js"
+import{deliveryOptions} from "../data/deliveryOptions.js";
+
 
 //converting static HTML to dynamic using JS similary to amazone.js where data was taken from product.js and populatted on webpage using js
 let cartSummaryHTML = '';
@@ -88,7 +89,9 @@ function deliveryOptionsHTML(matchingProduct,cartItem){
 
     html +=
     `
-    <div class="delivery-option">
+    <div class="delivery-option js-delivery-option"
+    data-product-id="${matchingProduct.id}"
+    data-delivery-option-id="${deliveryOption.id }">
         <input type="radio"
         ${isChecked ?'checked':''}
           class="delivery-option-input"
@@ -118,6 +121,15 @@ document.querySelectorAll('.js-remove-cart').forEach((link)=>{
     document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
   })
 });
+
+//adding eventlistner to each delivery option to update the option selected on the page and displacy the delivery date of the option we select
+document.querySelectorAll('.js-delivery-option').forEach((element)=>{
+  element.addEventListener('click',()=>{
+    const {productId, deliveryOptionId} = element.dataset;
+    updateDeliveryOption(productId,deliveryOptionId)
+  })
+});
+
 
 //adding event listner to all update link on checkout page
 document.querySelectorAll('.js-update-cart').forEach(updateLink=>{
