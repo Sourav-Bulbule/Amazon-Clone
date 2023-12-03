@@ -71,7 +71,8 @@ export function updateItemQuantity(productId,newQuantity){
   });
   matchingItem.quantity = newQuantity;
   saveToStorage();
-  location.reload();
+  
+  //location.reload();
   
 }
 

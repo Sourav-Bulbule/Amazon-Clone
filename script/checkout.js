@@ -6,6 +6,8 @@ import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import{deliveryOptions} from "../data/deliveryOptions.js";
 
 
+//make this function as it hold the main html to load on the page so incase if we make changes to any one element on the page instead of reloading the page we call this function to re-run and update thoes elements to the page
+function renderFunction(){
 //converting static HTML to dynamic using JS similary to amazone.js where data was taken from product.js and populatted on webpage using js
 let cartSummaryHTML = '';
 cart.forEach((cartItem)=>{
@@ -127,6 +129,7 @@ document.querySelectorAll('.js-delivery-option').forEach((element)=>{
   element.addEventListener('click',()=>{
     const {productId, deliveryOptionId} = element.dataset;
     updateDeliveryOption(productId,deliveryOptionId)
+    renderFunction();
   })
 });
 
@@ -157,7 +160,8 @@ document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
     }
     
     save.classList.remove('is-editing-quantity');
-    document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
+    renderFunction();
+    //document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
     
     
   });
@@ -165,4 +169,6 @@ document.querySelectorAll('.js-savequantityto-cart').forEach(saveLink=>{
 
 //shows the quantity of items presnet in the cart on the webpage
 document.querySelector('.js-item-quantity').innerHTML = updateQuantity() + ' Items';
-  
+}
+
+renderFunction();
